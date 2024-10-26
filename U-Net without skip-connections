@@ -1,0 +1,42 @@
+-1,))(b)
+b = layers.Dense(512*4*4, kernel_regularizer=l2_reg,)(b)
+b = layers.LeakyReLU(negative_slope=0.2)(b)
+
+b = layers.Dropout(0.2)(b)
+
+b = layers.Dense(512*4*4*2, kernel_regularizer=l2_reg,)(b)
+b = layers.LeakyReLU(negative_slope=0.2)(b)
+b = layers.Reshape((4,4,1024))(b)
+
+
+# Decoder
+d = layers.UpSampling2D(size=(2, 2))(b)
+d = layers.Conv2D(1024, kernel_size=4, padding="same")(d)
+d = layers.LeakyReLU(negative_slope=0.2)(d)
+
+d = layers.UpSampling2D(size=(2, 2))(d)
+d = layers.Conv2D(512, kernel_size=4, padding="same")(d)
+d = layers.LeakyReLU(negative_slope=0.2)(d)
+
+d = layers.UpSampling2D(size=(2, 2))(d)
+d = layers.Conv2D(256, kernel_size=4, padding="same")(d)
+d = layers.LeakyReLU(negative_slope=0.2)(d)
+
+d = layers.UpSampling2D(size=(2, 2))(d)
+d = layers.Conv2D(128, kernel_size=4, padding="same")(d)
+d = layers.LeakyReLU(negative_slope=0.2)(d)
+
+d = layers.UpSampling2D(size=(2, 2))(d)
+d = layers.Conv2D(64, kernel_size=4, padding="same")(d)
+d = layers.LeakyReLU(negative_slope=0.2)(d)
+
+d = layers.UpSampling2D(size=(2, 2))(d)
+d = layers.Conv2D(32, kernel_size=4, padding="same")(d)
+d = layers.LeakyReLU(negative_slope=0.2)(d)
+
+
+# Output
+outputs = layers.Conv2D(3, kernel_size=3, padding="same", activation="tanh")(d)
+
+model = models.Model(inputs=inputs, outputs=outputs, name="build_unet")
+return model
