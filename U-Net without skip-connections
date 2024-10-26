@@ -1,4 +1,27 @@
--1,))(b)
+# Encoder
+c = layers.Conv2D(32, kernel_size=4, strides=2, padding="same")(inputs)
+c = layers.LeakyReLU(negative_slope=0.2)(c) 
+
+c = layers.Conv2D(64, kernel_size=4, strides=2, padding="same")(c)
+c = layers.LeakyReLU(negative_slope=0.2)(c)
+
+c = layers.Conv2D(128, kernel_size=4, strides=2, padding="same")(c)
+c = layers.LeakyReLU(negative_slope=0.2)(c)
+
+c = layers.Conv2D(256, kernel_size=4, strides=2, padding="same")(c)
+c = layers.LeakyReLU(negative_slope=0.2)(c)
+
+c = layers.Conv2D(512, kernel_size=4, strides=2, padding="same")(c)
+c = layers.LeakyReLU(negative_slope=0.2)(c)
+
+c = layers.Conv2D(1024, kernel_size=4, strides=2, padding="same")(c)
+c = layers.LeakyReLU(negative_slope=0.2)(c)
+
+
+# Bottle-neck
+b = InstanceNormalization()(c)
+
+b = layers.Reshape((-1,))(b)
 b = layers.Dense(512*4*4, kernel_regularizer=l2_reg,)(b)
 b = layers.LeakyReLU(negative_slope=0.2)(b)
 
